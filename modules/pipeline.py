@@ -131,7 +131,7 @@ def pipeline() -> None:
 
     logging.info(f'Model is saved as {model_filename}')
 
-    pred.predict(model_filename)
+    pred.predict()
 
 if __name__ == '__main__':
     pipeline()

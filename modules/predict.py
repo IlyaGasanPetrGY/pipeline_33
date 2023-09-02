@@ -6,11 +6,10 @@ import pandas as pd
 import json
 import os
 import glob
-import glob
 
 path = os.environ.get('PROJECT_PATH', '.')
 
-def predict(name_model):
+def predict():
 
     def read_from_json(path_l):
 
@@ -23,8 +22,11 @@ def predict(name_model):
         df = pd.DataFrame.from_dict(data)
         return df
 
+    list_of_files = glob.glob(f'{path}/data/models/*.pkl')  # * means all if need specific format then *.csv
+    latest_file = max(list_of_files, key=os.path.getctime)
+    print(latest_file)
 
-    with open(name_model, 'rb') as fl:
+    with open(latest_file, 'rb') as fl:
         model = dill.load(fl)
     list_test = os.listdir(f'{path}/data/test/')
 
@@ -33,7 +35,7 @@ def predict(name_model):
 
         df = read_from_json(f'{path}/data/test/{i}' )
         res = model.predict(df)
-        df.to_csv(f'{path}/data/predictions/test.csv')
+        df.to_csv(f'{path}/data/predictions/test{i}.csv')
 
 if __name__ == '__main__':
     predict()
